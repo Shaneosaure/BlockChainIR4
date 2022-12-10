@@ -15,7 +15,7 @@ Il faut avoir installer à l'aide de `pip` ou `pip3` les libs suivantes:
 * pycryptodome
 
 Projet réalisé par :
-* Aymeric BOURDIN @github/BethGarion
-* Rémi JARDRET @RemiESAIP
-* Stéphane SIMON @Shaneosaure
-* Thomas PERRAULT @BethGarion
+* [Aymeric BOURDIN](https://github.com/warzazate)
+* [Rémi JARDRET](https://github.com/RemiESAIP)
+* [Stéphane SIMON](https://github.com/Shaneosaure)
+* [Thomas PERRAULT](https://github.com/BethGarion)
