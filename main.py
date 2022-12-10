@@ -123,53 +123,47 @@ class Transaction:
         self.transaction_id= int.from_bytes(sha256(self.transaction.encode()).digest(),byteorder='big') #on hash
         self.signature = pow(self.transaction_id, key.d, key.n) # on la signe
     
-
+# Fonction pour faire un effet de chargement à l'affichage 
+# (uniquement cosmétique ahah)
 def attendre():
     for i in range(15):
         time.sleep(0.3)
         print(".", sep=' ', end='', flush=True)
 
-# Fonction test pour la classe transaction
-def testTransac():
-    myblockchain = Blockchain()
-    for i in range(40):
-        transac ='George envoie {} à Joe'.format(random.uniform(0.1, 75.5))
-        objet = Transaction(transac)
-        myblockchain.add(objet)
-    for i in range(40): 
-        print('{} à {}'.format(myblockchain.unconfirmed_transactions[i].transaction, myblockchain.unconfirmed_transactions[i].transaction_date))
-        print('ID de transaction: {}\n'.format(myblockchain.unconfirmed_transactions[i].signature))
 
-
-# Fonction test pour la classe blockchaine
+# Fonction test de la blockchaine
 def testBlockchain():
-    while True:
-        os.system('clear')
-        os.system('cls')
-        print("--------------------------------------------------------------------")
-        #On initialise notre blockchaine
-        blockchain= Blockchain()
-        
-        #On génère une pair de clé pour Alice
-        print("Créons des cléfs pour une Alice:")
-        keyPairAlice = RSA.generate(bits=1024)
-        print("Cléfs d'Alice:")
-        print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})\n")
-        print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})\n")
-        print("--------------------------------------------------------------------\n")
+    os.system('clear')
+    os.system('cls')
+    print("--------------------------------------------------------------------\n")
+    print("Test Blockchaine\n")
+    print("--------------------------------------------------------------------")
+    #On initialise notre blockchaine
+    blockchain= Blockchain()
+    
+    #On génère une pair de clé pour Alice
+    print("Créons des cléfs pour une Alice:")
+    keyPairAlice = RSA.generate(bits=1024)
+    print("Cléfs d'Alice:")
+    print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})\n")
+    print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})\n")
+    print("--------------------------------------------------------------------\n")
 
-        attendre()
+    attendre()
 
-        transac ='Alice envoie {} à Bob'.format(random.uniform(0.1, 75.5))
-        objet = Transaction(transac,keyPairAlice)
-        blockchain.add(objet)
+    transac ='Alice envoie {} à Bob'.format(random.uniform(0.1, 75.5))
+    objet = Transaction(transac,keyPairAlice)
+    blockchain.add(objet)
+    newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
+    proof=blockchain.proof_of_work(newBlock)
+    blockchain.add_block(newBlock,proof)
+    for i in range(5):
         newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
         proof=blockchain.proof_of_work(newBlock)
         blockchain.add_block(newBlock,proof)
-        for i in range(5):
-            newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
-            proof=blockchain.proof_of_work(newBlock)
-            blockchain.add_block(newBlock,proof)
+
+    while True:
+        
         print("\n--------------------------------------------------------------------\n")
 
         print(
@@ -199,36 +193,170 @@ def testBlockchain():
             print("Veuillez mettre un choix correct")
    
 
-# Fonction test pour la condition "Toutes les dix transactions un nouveau bloc est créé"
-def testCondition():
-    os.system('clear')
-    myblockchain = Blockchain() # on crée une blockchaine
-    for i in range(41): # on crée pleins de transactions aléatoires
-        transac ='George envoie {} à Joe'.format(random.uniform(0.1, 75.5))
-        objet = Transaction(transac)
-        myblockchain.add(objet)
-    for i in range(41): # on les affiche
-        print('{} à {}'.format(myblockchain.unconfirmed_transactions[i].transaction, myblockchain.unconfirmed_transactions[i].transaction_date))
-        print('ID de transaction: {}\n'.format(myblockchain.unconfirmed_transactions[i].signature))
-    
-    myblockchain.afficher() # on affiche notre blockchaine pour vérifier les blocks crée
 
 
-
+# Fonction test des transactions
 def testTransactions():
+    os.system('clear')
+    os.system('cls')
+    print("--------------------------------------------------------------------\n")
+    print("Test des transactions\n")
+    print("--------------------------------------------------------------------")
+    #On initialise notre blockchaine
+    blockchain= Blockchain()
+    
     #On génère une pair de clé pour Alice
+    print("Créons des cléfs pour une Alice:")
     keyPairAlice = RSA.generate(bits=1024)
     print("Cléfs d'Alice:")
-    print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})")
-    print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})")
-    myblockchain = Blockchain() # on crée une blockchaine
-    for i in range(41): # on crée pleins de transactions aléatoires
+    print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})\n")
+    print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})\n")
+    print("--------------------------------------------------------------------\n")
+    attendre()
+    print("\n--------------------------------------------------------------------\n")
+    print("Une blockchaine est créée\n")
+    print("Alice génère 41 transactions vers un certain Bob\n")
+    for i in range(41): # on crée pleins de transactions aléatoires 
         transac ='Alice envoie {} à Bob'.format(random.uniform(0.1, 75.5))
         objet = Transaction(transac,keyPairAlice)
-        myblockchain.add(objet)
-    myblockchain.check(myblockchain.unconfirmed_transactions[15].transaction_id, keyPairAlice)
-    myblockchain.tamper(myblockchain.unconfirmed_transactions[15].transaction_id)
-    myblockchain.check(myblockchain.unconfirmed_transactions[15].transaction_id, keyPairAlice)
+        blockchain.add(objet)
+    print('Affichage de la transaction 15 par exemple:')
+    print('{} à {}'.format(blockchain.unconfirmed_transactions[14].transaction, blockchain.unconfirmed_transactions[14].transaction_date))
+    print('ID de transaction: {}\n'.format(blockchain.unconfirmed_transactions[14].signature))
+    # On crée un block 
+    newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
+    proof=blockchain.proof_of_work(newBlock)
+    blockchain.add_block(newBlock,proof)
+    while True:
+        print("\n--------------------------------------------------------------------\n")
+
+        print(
+            " 1. Afficher les 10 dernières transactions de la blockchaine\n",
+            "2. Tester une transaction puis l'altérer et retester\n",
+            "3. Tester la condition \" 10 Transactions = nouveau blocs\"\n",
+            "4. Retourner au menu précédent\n",
+        )
+        choix = input("Veuillez choisir parmis les options:")
+        if choix =="1":
+            os.system('clear')
+            os.system('cls')
+            print("--------------------------------------------------------------------\n")
+            blockchain.show()
+            attendre()
+        elif choix == "2":
+            os.system('clear')
+            os.system('cls')
+            print("--------------------------------------------------------------------\n")
+            print('La transaction n°16 est signée par Alice:')
+            print('{} à {}'.format(blockchain.unconfirmed_transactions[15].transaction, blockchain.unconfirmed_transactions[15].transaction_date))
+            print('ID de transaction: {}\n'.format(blockchain.unconfirmed_transactions[15].signature))
+            print('On test cette transaction avec check():')
+            blockchain.check(blockchain.unconfirmed_transactions[15].transaction_id, keyPairAlice)
+            attendre()
+            print("\nOn altére ce block:")
+            blockchain.tamper(blockchain.unconfirmed_transactions[15].transaction_id)
+            print('{} à {}'.format(blockchain.unconfirmed_transactions[15].transaction, blockchain.unconfirmed_transactions[15].transaction_date))
+            print('ID de transaction: {}\n'.format(blockchain.unconfirmed_transactions[15].signature))
+            attendre()
+            print("\net on execute notre fonction check()")
+            blockchain.check(blockchain.unconfirmed_transactions[15].transaction_id, keyPairAlice)
+            attendre()
+            attendre()
+        elif choix == "3":  
+            os.system('clear')
+            os.system('cls')
+            print("--------------------------------------------------------------------\n")
+            print("Comme on l'a dit à l'initialisation de notre blockchaine, Alice a fait 41 transactions vers un bob")
+            print("Ainsi, chaque block doit avoir un maximum de 10 transactions ?")
+            print("Le block 5 possède 1 transactions ?")
+            print("Vérifions:")
+            attendre()
+            print("\nBlock 3:")
+            print('Block {} ajouté à {}'.format(blockchain.chain[3].index, blockchain.chain[3].temps))
+            print('Hash précédent: {}'.format(blockchain.chain[3].hashPrecedent))
+            print('Contient -->{}<-- transactions'.format(len(blockchain.chain[3].transactions)))
+            print('Hash actuel: {}\n'.format(blockchain.chain[3].hash))
+            print('Valeur du nonce: {}\n'.format(blockchain.chain[3].nonce))
+            print("Le block a été créée automatiquement car 10 transactions avaient été faites")
+            attendre()
+            print("Block 5:")
+            print('Block {} ajouté à {}'.format(blockchain.chain[4].index, blockchain.chain[4].temps))
+            print('Hash précédent: {}'.format(blockchain.chain[4].hashPrecedent))
+            print('Contient -->{}<-- transactions'.format(len(blockchain.chain[4].transactions)))
+            print('Hash actuel: {}\n'.format(blockchain.chain[4].hash))
+            print('Valeur du nonce: {}\n'.format(blockchain.chain[4].nonce))
+            print("\nLe block a été créée automatiquement et possède bien la 41ème transaction")
+            print("\n--> Ainsi la condition est vérifiée")
+            attendre()
+        elif choix == "4":
+            break
+        else:
+            print("Veuillez mettre un choix correct")
+
+# Fonction test pour la Proof of Work
+def testPOW():
+    os.system('clear')
+    os.system('cls')
+    print("--------------------------------------------------------------------\n")
+    print("Test Blockchaine\n")
+    print("--------------------------------------------------------------------")
+    #On initialise notre blockchaine
+    blockchain= Blockchain()
+    
+    #On génère une pair de clé pour Alice
+    print("Créons des cléfs pour une Alice:")
+    keyPairAlice = RSA.generate(bits=1024)
+    print("Cléfs d'Alice:")
+    print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})\n")
+    print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})\n")
+    print("--------------------------------------------------------------------\n")
+
+    attendre()
+
+    transac ='Alice envoie {} à Bob'.format(random.uniform(0.1, 75.5))
+    objet = Transaction(transac,keyPairAlice)
+    blockchain.add(objet)
+    newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
+    proof=blockchain.proof_of_work(newBlock)
+    blockchain.add_block(newBlock,proof)
+    for i in range(5):
+        newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
+        proof=blockchain.proof_of_work(newBlock)
+        blockchain.add_block(newBlock,proof)
+
+    while True:
+        
+        print("\n--------------------------------------------------------------------\n")
+
+        print(
+            " 1. Affiche le block initial\n",
+            "2. Afficher toute la blockchaine\n",
+            "3. Retourner au menu précédent\n",
+        )
+        choix = input("Veuillez choisir parmis les options:")
+        if choix =="1":
+            os.system('clear')
+            os.system('cls')
+            print("--------------------------------------------------------------------\n")
+            print('Block {} ajouté à {}'.format(blockchain.chain[0].index, blockchain.chain[0].temps))
+            print('Hash précédent: {}'.format(blockchain.chain[0].hashPrecedent))
+            print('Contient {} transactions'.format(len(blockchain.chain[0].transactions)))
+            print('Hash actuel: {}\n'.format(blockchain.chain[0].hash))
+            print('Valeur du nonce: {}\n'.format(blockchain.chain[0].nonce))
+            attendre()
+            attendre()
+        elif choix == "2":
+            blockchain.afficher()
+            attendre()
+            attendre()
+        elif choix == "3":  
+            break          
+        else:
+            print("Veuillez mettre un choix correct")
+   
+
+
+
 
 def main():
     while True:
@@ -238,16 +366,16 @@ def main():
         print(
             " 1. Créér une blockchaine, 5 blocks et les afficher\n",
             "2. Tester les transactions\n",
-            "3. Tester la Proof Of Work de notre blockchaine\n",
+            "3. Détails la Proof Of Work de notre blockchaine\n",
             "4. Fermer le programme"
         )
         choix = input("Veuillez choisir parmis les options:")
         if choix =="1":
             testBlockchain()
         elif choix == "2":
-            testBlockchain()
+            testTransactions()
         elif choix == "3":
-            testBlockchain()
+            testPOW()
         elif choix == "4":
             break
         else:
