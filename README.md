@@ -9,7 +9,7 @@ Votre programme doit permettre de :
 * De valider la bloc chain
 Toutes les dix transactions un nouveau bloc est créé.
 
-Ce programme est destinée à tourner dans une machine docker mais s'execute également en local.
+Ce programme est destiné à tourner dans une machine docker mais s'execute également en local.
 Il faut avoir installer à l'aide de `pip` ou `pip3` les libs suivantes:
 * hashlib
 * pycryptodome
