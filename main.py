@@ -192,9 +192,6 @@ def testBlockchain():
         else:
             print("Veuillez mettre un choix correct")
    
-
-
-
 # Fonction test des transactions
 def testTransactions():
     os.system('clear')
@@ -298,66 +295,55 @@ def testPOW():
     os.system('clear')
     os.system('cls')
     print("--------------------------------------------------------------------\n")
-    print("Test Blockchaine\n")
+    print("Test Proof of Work\n")
     print("--------------------------------------------------------------------")
     #On initialise notre blockchaine
     blockchain= Blockchain()
-    
-    #On génère une pair de clé pour Alice
-    print("Créons des cléfs pour une Alice:")
-    keyPairAlice = RSA.generate(bits=1024)
-    print("Cléfs d'Alice:")
-    print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})\n")
-    print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})\n")
-    print("--------------------------------------------------------------------\n")
 
     attendre()
-
-    transac ='Alice envoie {} à Bob'.format(random.uniform(0.1, 75.5))
-    objet = Transaction(transac,keyPairAlice)
-    blockchain.add(objet)
-    newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
-    proof=blockchain.proof_of_work(newBlock)
-    blockchain.add_block(newBlock,proof)
     for i in range(5):
         newBlock = Block(blockchain.last_block.index + 1, [], datetime.now(), blockchain.last_block.hash)
         proof=blockchain.proof_of_work(newBlock)
         blockchain.add_block(newBlock,proof)
-
     while True:
         
         print("\n--------------------------------------------------------------------\n")
 
         print(
-            " 1. Affiche le block initial\n",
-            "2. Afficher toute la blockchaine\n",
-            "3. Retourner au menu précédent\n",
+            " 1. Démonstration de la PoW\n",
+            "2. Retourner au menu précédent\n",
         )
         choix = input("Veuillez choisir parmis les options:")
         if choix =="1":
             os.system('clear')
             os.system('cls')
             print("--------------------------------------------------------------------\n")
+            print("Notre blockchaine contient au moins 5 blocks dans cette exemple")
+            print('\nVoici le block initial:')
             print('Block {} ajouté à {}'.format(blockchain.chain[0].index, blockchain.chain[0].temps))
             print('Hash précédent: {}'.format(blockchain.chain[0].hashPrecedent))
             print('Contient {} transactions'.format(len(blockchain.chain[0].transactions)))
             print('Hash actuel: {}\n'.format(blockchain.chain[0].hash))
             print('Valeur du nonce: {}\n'.format(blockchain.chain[0].nonce))
             attendre()
+            print("Pour vérifier notre Proof Of work, on regarde le block suivant:")
+            print('Block {} ajouté à {}'.format(blockchain.chain[1].index, blockchain.chain[1].temps))
+            print('Hash précédent: {}'.format(blockchain.chain[1].hashPrecedent))
+            print('Contient {} transactions'.format(len(blockchain.chain[1].transactions)))
+            print('Hash actuel: {}\n'.format(blockchain.chain[1].hash))
+            print('Valeur du nonce: {}\n'.format(blockchain.chain[1].nonce))
+            print("On voit que le hash précédent correspond :" ,blockchain.chain[0].hash,"=",blockchain.chain[1].hashPrecedent)
             attendre()
-        elif choix == "2":
-            blockchain.afficher()
-            attendre()
-            attendre()
-        elif choix == "3":  
+            print("\nOn voit également que la difficulté de notre blockchaine est mise à 2 (deux zéros au débuts):", blockchain.chain[1].hash)
+            print("Ce paramètres est changeable dans notre code, ligne 44 (détaillé dans notre rapport aussi)")
+        elif choix == "2":  
             break          
         else:
             print("Veuillez mettre un choix correct")
-   
-
-
-
-
+    
+# Fonction principale pour la démonstration de notre projet
+# Cette fonction permet d'afficher une sorte de menu avec différents choix vers d'autres menus/fonctions
+# le but étant de permettre la compréhension de notre code et ses fonctionnalités.
 def main():
     while True:
         print("--------------------------------------------------------------------")
@@ -381,6 +367,5 @@ def main():
         else:
             print("Veuillez mettre un choix correct")
 
-
-
+# On appelle notre démonstration
 main()
