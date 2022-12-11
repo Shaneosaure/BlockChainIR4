@@ -14,6 +14,11 @@ Il faut avoir installer à l'aide de `pip` ou `pip3` les libs suivantes:
 * hashlib
 * pycryptodome
 
+Si vous avez le problème suivant: AttributeError: module 'time' has no attribute 'clock'
+--> 
+* désinstaller PyCrypto si installé: pip3 uninstall PyCrypto
+* installer PyCryptodome: pip3 install -U PyCryptodome
+
 Projet réalisé par :
 * [Aymeric BOURDIN](https://github.com/warzazate)
 * [Rémi JARDRET](https://github.com/RemiESAIP)
