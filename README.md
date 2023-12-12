@@ -16,8 +16,19 @@ Il faut avoir installer à l'aide de `pip` ou `pip3` les libs suivantes:
 
 Si vous avez le problème suivant: AttributeError: module 'time' has no attribute 'clock'
 --> 
-* désinstaller PyCrypto si installé: pip3 uninstall PyCrypto
-* installer PyCryptodome: pip3 install -U PyCryptodome
+* désinstaller PyCrypto si installé: `pip3 uninstall PyCrypto`
+* installer PyCryptodome: `pip3 install -U PyCryptodome`
+
+Pour run le projet dans un docker container:
+```shell
+docker pull shaneosaure/blockchainproject
+docker run -it shaneosaure/blockchainproject
+```
+
+Ou si vous voulez build l'image docker en local:
+```shell
+docker build -t DOCKERFILE shaneosaure/blockchainproject .
+```
 
 Projet réalisé par :
 * [Aymeric BOURDIN](https://github.com/warzazate)
