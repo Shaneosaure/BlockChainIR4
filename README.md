@@ -27,7 +27,7 @@ docker run -it shaneosaure/blockchainproject
 
 Ou si vous voulez build l'image docker en local:
 ```shell
-docker build -t DOCKERFILE shaneosaure/blockchainproject .
+docker build -f DOCKERFILE -t shaneosaure/blockchainproject .
 ```
 
 Projet réalisé par :
