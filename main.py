@@ -143,7 +143,7 @@ def testBlockchain():
     
     #On génère une pair de clé pour Alice
     print("Créons des cléfs pour une Alice:")
-    keyPairAlice = RSA.generate(bits=1024)
+    keyPairAlice = RSA.generate(bits=2048)
     print("Cléfs d'Alice:")
     print(f"Public key:  (n={hex(keyPairAlice.n)}, e={hex(keyPairAlice.e)})\n")
     print(f"Private key: (n={hex(keyPairAlice.n)}, d={hex(keyPairAlice.d)})\n")
